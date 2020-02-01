@@ -1,0 +1,3 @@
+-cp src
+-js temp/main.js
+-main Main
