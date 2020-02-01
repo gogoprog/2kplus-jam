@@ -8,7 +8,7 @@ build:
 retail:
 	haxe build.hxml
 	mkdir -p retail
-	uglifyjs --compress --mangle -- temp/main.js > temp/main.min.js
+	uglifyjs --compress --mangle --mangle-props -- temp/main.js > temp/main.min.js
 	cat src/before.html > retail/index.html
 	cat temp/main.min.js >> retail/index.html
 	cat src/after.html >> retail/index.html
