@@ -1,6 +1,11 @@
 import js.Browser.document;
 import js.Browser.window;
 
+typedef Point = {
+    var x:Float;
+    var y:Float;
+}
+
 class Main {
     static function main() {
         var w = window;
@@ -10,6 +15,7 @@ class Main {
         c.width = c.height = screenSize;
         var ctx:js.html.CanvasRenderingContext2D = c.getContext("2d");
         var pt:Float = 0;
+        var lastFireTime:Float = 0;
         var a:Float = 0;
         function col(n) {
             ctx.fillStyle = n;
@@ -19,13 +25,27 @@ class Main {
         }
         function drawShip(x:Float, y:Float) {
             col("white");
-            drawRect(x, y, 32, 64);
+            drawRect(x, y, 30, 60);
             col("orange");
-            drawRect(x-20, y+32, 16, 28);
-            drawRect(x+20, y+32, 16, 28);
+            drawRect(x-15, y+32, 16, 28);
+            drawRect(x+15, y+32, 16, 28);
         }
-        function drawStar(x:Float, y:Float) {
-            drawRect(x, y, 2, 2);
+        var rseed = 1;
+        function random():Float {
+            var x = (Math.sin(rseed++) + 1) * 10000;
+            return x - Std.int(x);
+        }
+        var mx = 0;
+        var bullets:Array<Point> = [];
+        var mustFire:Bool;
+        w.onmousedown = function() {
+            mustFire = true;
+        }
+        w.onmouseup= function() {
+            mustFire = false;
+        }
+        w.onmousemove = function(e) {
+            mx = e.clientX;
         }
         function loop(t:Float) {
             var dt = (t-pt) / 1000;
@@ -33,9 +53,28 @@ class Main {
             a += 32 * dt;
             ctx.fillStyle="black";
             drawRect(256, 256, screenSize, screenSize);
-            drawShip(256 + Math.sin(a/10) * 100, 400);
-            drawStar(50, 50);
-            drawStar(250, 90);
+            drawShip(mx, 460);
+            rseed = 1;
+            col("white");
+
+            for(i in 0...50) {
+                drawRect(random() * 512, (random() * 512 + t * (random() * 0.2)) % 512, 2, 2);
+            }
+
+            col("lightgreen");
+
+            for(b in bullets) {
+                b.y -= 200 * dt;
+                drawRect(b.x, b.y, 4, 8);
+            }
+
+            if(mustFire) {
+                if(t - lastFireTime > 200) {
+                    bullets.push({x:mx, y:420});
+                    lastFireTime = t;
+                }
+            }
+
             w.requestAnimationFrame(loop);
         }
         loop(0);
