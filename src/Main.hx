@@ -23,10 +23,15 @@ class Main {
         var lastFireTime:Float = 0;
         var rseed;
         var mx;
+        var life = 100;
         var mustFire:Bool;
         var bullets:Array<Bullet> = [];
         var enemies:Array<Enemy> = [];
         var time:Int = 0;
+        var extremes = [-1, 1];
+        var m = Math;
+        var abs = m.abs;
+        var sin = m.sin;
         function col(n) {
             ctx.fillStyle = n;
         }
@@ -35,19 +40,19 @@ class Main {
         }
         function drawShip(x:Float, y:Float) {
             col("white");
-            drawRect(x, y, 30, 40);
-            drawRect(x, y - 32, 20, 30);
+            drawRect(x, y, 20, 30);
+            drawRect(x, y -20, 16, 20);
             col("orange");
 
-            for(i in [-1, 1]) {
-                drawRect(x + (i*15), y+22, 16, 28);
+            for(i in extremes) {
+                drawRect(x + (i*10), y+16, 12, 20);
             }
         }
         function drawEnemy(x:Float, y:Float) {
             col("red");
             drawRect(x, y, 20, 40);
 
-            for(i in [-1, 1]) {
+            for(i in extremes) {
                 col("brown");
                 drawRect(x + (i*10), y-32, 16, 28);
                 col("cyan");
@@ -55,26 +60,26 @@ class Main {
             }
         }
         function random():Float {
-            var x = (Math.sin(rseed++) + 1) * 10000;
+            var x = (sin(rseed++) + 1) * 10000;
             return x - Std.int(x);
         }
-        w.onmousedown = w.onmouseup= function(e) {
+        w.onmousedown = w.onmouseup = function(e) {
             mustFire = untyped e.buttons;
         }
         w.onmousemove = function(e) {
             mx = e.clientX;
         }
         function fire(x, y, d) {
-            for(b in bullets) {
-                if(b.y < -32) {
-                    b.y = y;
-                    b.x = x;
-                    b.d = d;
-                    return;
+            var n = bullets.length;
+
+            for(i in 0...n) {
+                if(abs(bullets[i].y) > 1024) {
+                    n = i;
+                    break;
                 }
             }
 
-            bullets.push({x:x, y:y, d:d});
+            bullets[n] = {x:x, y:y, d:d};
         }
         function loop(t:Float) {
             col("black");
@@ -91,6 +96,13 @@ class Main {
                 b.y += 5 * b.d;
                 col(b.d == -1 ? "lightgreen" : "red");
                 drawRect(b.x, b.y, 4, 12);
+
+                if(b.d > 0) {
+                    if(abs(b.y - 420) + abs(b.x-mx) < 32) {
+                        life--;
+                        b.y = 999;
+                    }
+                }
             }
 
             if(mustFire) {
@@ -101,22 +113,46 @@ class Main {
             }
 
             for(e in enemies) {
-                e.t++;
-                var x = e.x + Math.sin(e.t / 100) * 100;
+                var x = e.x + sin(++e.t / 100) * 100;
                 var y =  -20 + e.t * 1;
                 drawEnemy(x, y);
 
                 if(e.t % 30 == 0) {
                     fire(x, y, 1);
                 }
+
+                for(b in bullets) {
+                    if(b.d < 0) {
+                        if(abs(b.y - y) + abs(b.x-x) < 32) {
+                            b.y = -999;
+                            e.life -= 1;
+
+                            if(e.life < 1) {
+                                e.t = 0xFFFF;
+                            }
+                        }
+                    }
+                }
             }
 
             rseed = time;
 
             if((time % 100) == 0) {
-                enemies.push({x: 512 * random(), t:0, life:100});
+                var n = enemies.length;
+
+                for(e in 0...n) {
+                    if(enemies[e].t > 0xFFFF) {
+                        n = e;
+                        break;
+                    }
+                }
+
+                enemies[n] = {x: 512 * random(), t:0, life:5};
             }
 
+            col("white");
+            ctx.font = "20px Courier New";
+            ctx.fillText("HP: " + life, 12, 500);
             time++;
             w.requestAnimationFrame(loop);
         }
