@@ -35,6 +35,9 @@ class Main {
         function col(n) {
             ctx.fillStyle = n;
         }
+        function alpha(n) {
+            ctx.globalAlpha = n;
+        }
         function drawRect(x:Float, y:Float, w, h) {
             ctx.fillRect(x-w/2, y-h/2, w, h);
         }
@@ -84,13 +87,14 @@ class Main {
         function loop(t:Float) {
             col("black");
             drawRect(256, 256, screenSize, screenSize);
-            drawShip(mx, 460);
             rseed = 1;
             col("white");
 
             for(i in 0...50) {
                 drawRect(random() * 512, (random() * 512 + t * (random() * 0.2)) % 512, 2, 2);
             }
+
+            alpha(1);
 
             for(b in bullets) {
                 b.y += 5 * b.d;
@@ -101,9 +105,12 @@ class Main {
                     if(abs(b.y - 420) + abs(b.x-mx) < 32) {
                         life--;
                         b.y = 999;
+                        alpha(0.5);
                     }
                 }
             }
+
+            drawShip(mx, 460);
 
             if(mustFire) {
                 if(time - lastFireTime > 10) {
@@ -114,25 +121,29 @@ class Main {
 
             for(e in enemies) {
                 var x = e.x + sin(++e.t / 100) * 100;
-                var y =  -20 + e.t * 1;
-                drawEnemy(x, y);
+                var y =  -64 + e.t;
 
                 if(e.t % 30 == 0) {
                     fire(x, y, 1);
                 }
+
+                alpha(1);
 
                 for(b in bullets) {
                     if(b.d < 0) {
                         if(abs(b.y - y) + abs(b.x-x) < 32) {
                             b.y = -999;
                             e.life -= 1;
+                            alpha(0.5);
 
                             if(e.life < 1) {
-                                e.t = 0xFFFF;
+                                e.t = 666;
                             }
                         }
                     }
                 }
+
+                drawEnemy(x, y);
             }
 
             rseed = time;
@@ -141,7 +152,7 @@ class Main {
                 var n = enemies.length;
 
                 for(e in 0...n) {
-                    if(enemies[e].t > 0xFFFF) {
+                    if(enemies[e].t > 666) {
                         n = e;
                         break;
                     }
