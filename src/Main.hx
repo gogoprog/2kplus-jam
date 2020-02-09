@@ -38,14 +38,22 @@ class Main {
         var mx = 0;
         var bullets:Array<Point> = [];
         var mustFire:Bool;
-        w.onmousedown = function() {
-            mustFire = true;
-        }
-        w.onmouseup= function() {
-            mustFire = false;
+        w.onmousedown = w.onmouseup= function(e) {
+            mustFire = untyped e.buttons;
         }
         w.onmousemove = function(e) {
             mx = e.clientX;
+        }
+        function fire() {
+            for(b in bullets) {
+                if(b.y < -32) {
+                    b.y = 420;
+                    b.x = mx;
+                    return;
+                }
+            }
+
+            bullets.push({x:mx, y:420});
         }
         function loop(t:Float) {
             var dt = (t-pt) / 1000;
@@ -70,7 +78,7 @@ class Main {
 
             if(mustFire) {
                 if(t - lastFireTime > 200) {
-                    bullets.push({x:mx, y:420});
+                    fire();
                     lastFireTime = t;
                 }
             }
