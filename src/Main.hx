@@ -8,6 +8,7 @@ typedef Bullet = {
 }
 
 typedef Enemy = {
+    var x:Float;
     var t:Float;
     var life:Int;
 }
@@ -34,20 +35,23 @@ class Main {
         }
         function drawShip(x:Float, y:Float) {
             col("white");
-            drawRect(x, y, 30, 60);
+            drawRect(x, y, 30, 40);
+            drawRect(x, y - 32, 20, 30);
             col("orange");
 
             for(i in [-1, 1]) {
-                drawRect(x + (i*15), y+32, 16, 28);
+                drawRect(x + (i*15), y+22, 16, 28);
             }
         }
         function drawEnemy(x:Float, y:Float) {
             col("red");
-            drawRect(x, y, 30, 60);
-            col("brown");
+            drawRect(x, y, 20, 40);
 
             for(i in [-1, 1]) {
-                drawRect(x + (i*15), y-32, 16, 28);
+                col("brown");
+                drawRect(x + (i*10), y-32, 16, 28);
+                col("cyan");
+                drawRect(x + (i*4), y-10, 4, 20);
             }
         }
         function random():Float {
@@ -60,17 +64,17 @@ class Main {
         w.onmousemove = function(e) {
             mx = e.clientX;
         }
-        function fire(d) {
+        function fire(x, y, d) {
             for(b in bullets) {
                 if(b.y < -32) {
-                    b.y = 420;
-                    b.x = mx;
+                    b.y = y;
+                    b.x = x;
                     b.d = d;
                     return;
                 }
             }
 
-            bullets.push({x:mx, y:420, d:d});
+            bullets.push({x:x, y:y, d:d});
         }
         function loop(t:Float) {
             col("black");
@@ -91,18 +95,26 @@ class Main {
 
             if(mustFire) {
                 if(time - lastFireTime > 10) {
-                    fire(-1);
+                    fire(mx, 420, -1);
                     lastFireTime = time;
                 }
             }
 
             for(e in enemies) {
                 e.t++;
-                drawEnemy(200, -20 + e.t * 1);
+                var x = e.x + Math.sin(e.t / 100) * 100;
+                var y =  -20 + e.t * 1;
+                drawEnemy(x, y);
+
+                if(e.t % 30 == 0) {
+                    fire(x, y, 1);
+                }
             }
 
+            rseed = time;
+
             if((time % 100) == 0) {
-                enemies.push({t:0, life:100});
+                enemies.push({x: 512 * random(), t:0, life:100});
             }
 
             time++;
