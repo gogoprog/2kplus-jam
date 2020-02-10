@@ -20,19 +20,21 @@ class Main {
         var screenSize = 512;
         c.width = c.height = screenSize;
         var ctx:js.html.CanvasRenderingContext2D = c.getContext("2d");
-        var lastFireTime:Float = 0;
+        var lastFireTime:Int;
         var rseed;
         var mx;
-        var life = 10;
+        var life:Int;
         var mustFire:Bool;
-        var bullets:Array<Bullet> = [];
-        var enemies:Array<Enemy> = [];
-        var time:Int = 0;
+        var bullets:Array<Bullet>;
+        var enemies:Array<Enemy>;
+        var time:Int;
         var extremes = [-1, 1];
         var m = Math;
         var abs = m.abs;
         var sin = m.sin;
         var state = 0;
+        var score;
+        var bestScore = 0;
         ctx.font = "20px monospace";
         function col(n) {
             ctx.fillStyle = n;
@@ -105,10 +107,15 @@ class Main {
                 scale(1/2);
                 ctx.fillText("Click to play!", 42, 232);
                 scale(1/2);
-                ctx.fillText("Best score: ", 32, 232);
+                ctx.fillText("Best score: " + bestScore, 32, 232);
 
                 if(mustFire) {
                     state++;
+                    time = score = 0;
+                    life = 10;
+                    bullets = [];
+                    enemies = [];
+                    lastFireTime = 0;
                 }
             } else if(state == 1) {
                 alpha(1);
@@ -123,6 +130,11 @@ class Main {
                             life--;
                             b.y = 999;
                             alpha(0.5);
+
+                            if(life < 1) {
+                                bestScore = cast m.max(score, bestScore);
+                                state = 0;
+                            }
                         }
                     }
                 }
@@ -155,6 +167,7 @@ class Main {
 
                                 if(e.life < 1) {
                                     e.t = 666;
+                                    score += 100;
                                 }
                             }
                         }
@@ -186,7 +199,8 @@ class Main {
 
                 for(i in 0...10) { str+= i< life ? "O":"_"; }
 
-                ctx.fillText("HP: [" + str + "]", 12, 506);
+                ctx.fillText("[" + str + "]", 12, 506);
+                ctx.fillText(cast score, 400, 506);
                 time++;
             }
 
