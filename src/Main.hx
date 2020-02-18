@@ -48,60 +48,44 @@ class Main {
         function drawRect(x:Float, y:Float, w, h) {
             ctx.fillRect(x-w/2, y-h/2, w, h);
         }
+        function mto(x, y) {
+            ctx.moveTo(x, y);
+        }
+        function lto(x, y) {
+            ctx.lineTo(x, y);
+        }
+        function beginPath() {
+            ctx.beginPath();
+        }
+        function fill() {
+            ctx.fill();
+        }
         function drawShip(x:Float, y:Float) {
-            col("white");
-            // drawRect(x, y, 20, 30);
-            // drawRect(x, y -20, 16, 20);
-            col("orange");
-            // for(i in extremes) {
-            //     drawRect(x + (i*10), y+16, 12, 20);
-            // }
-            ctx.save();
-            ctx.transform(1, 0, 0, 1, x, y - 16);
-            ctx.beginPath();
-            col("grey");
-            ctx.moveTo(-14.437124, 28.689550);
-            ctx.lineTo(-12.807428, 20.160670);
-            ctx.lineTo(2.142693, 5.935100);
-            ctx.lineTo(2.142693, 28.689550);
-            ctx.lineTo(-14.437124, 28.689550);
-            ctx.lineTo(-14.437124, 28.689550);
-            ctx.fill();
-            ctx.beginPath();
-            col("grey");
-            ctx.moveTo(0.983058, 5.935100);
-            ctx.lineTo(15.933256, 20.160670);
-            ctx.lineTo(17.562876, 28.689550);
-            ctx.lineTo(0.983058, 28.689550);
-            ctx.lineTo(0.983058, 5.935100);
-            ctx.lineTo(0.983058, 5.935100);
-            ctx.fill();
-            ctx.beginPath();
-            col("white");
-            ctx.moveTo(7.940909, 31.999850);
-            ctx.lineTo(-4.815196, 31.999960);
-            ctx.lineTo(-4.815196, 9.008580);
-            ctx.lineTo(-3.842114, 5.208070);
-            ctx.lineTo(-1.738355, 2.486850);
-            ctx.lineTo(1.562876, -0.000040);
-            ctx.lineTo(4.533133, 2.183960);
-            ctx.lineTo(6.888234, 5.049640);
-            ctx.lineTo(7.940909, 8.827540);
-            ctx.lineTo(7.940909, 31.999850);
-            ctx.lineTo(7.940909, 31.999850);
-            ctx.fill();
-            // #rect180
-            ctx.beginPath();
-            ctx.lineWidth = 0.081747;
-            ctx.fillStyle = 'rgb(120, 185, 235)';
-            ctx.moveTo(-4.815196, 28.689590);
-            ctx.lineTo(-4.815196, 31.999960);
-            ctx.lineTo(7.940909, 31.999960);
-            ctx.lineTo(7.940909, 28.689590);
-            ctx.lineTo(-4.815196, 28.689590);
-            ctx.lineTo(-4.815196, 28.689590);
-            ctx.fill();
-            ctx.restore();
+            col("#ccd");
+            drawRect(x, y, 20, 30);
+            col("#669");
+            drawRect(x, y, 4, 8);
+            col("gold");
+            drawRect(x, y + 15, 20, 4);
+            ctx.arc(x, y-62, 5, 0, 3.14);
+
+            for(i in extremes) {
+                ctx.save();
+                ctx.transform(i, 0, 0, 1, x, y - 16);
+                beginPath();
+                col("#88d");
+                mto(10, 10);
+                lto(10, 30);
+                lto(20, 30);
+                fill();
+                col("#99e");
+                beginPath();
+                mto(0, 5);
+                lto(0, -30);
+                lto(8, 5);
+                fill();
+                ctx.restore();
+            }
         }
         function drawEnemy(x:Float, y:Float) {
             col("red");
@@ -154,7 +138,8 @@ class Main {
                 scale(1/2);
                 ctx.fillText("Best score: " + bestScore, 32, 232);
 
-                if(mustFire) {
+                // if(mustFire) {
+                if(true) {
                     state++;
                     time = score = 0;
                     life = 10;
