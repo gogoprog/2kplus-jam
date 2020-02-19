@@ -62,27 +62,23 @@ class Main {
         }
         function drawShip(x:Float, y:Float) {
             col("#ccd");
-            drawRect(x, y, 20, 30);
+            drawRect(x, y, 20, 40);
             col("#669");
             drawRect(x, y, 4, 8);
+            beginPath();
+            ctx.arc(x, y - 20, 10, 3.14, 0);
+            fill();
             col("gold");
-            drawRect(x, y + 15, 20, 4);
-            ctx.arc(x, y-62, 5, 0, 3.14);
+            drawRect(x, y + 20, 20, 4);
 
             for(i in extremes) {
                 ctx.save();
                 ctx.transform(i, 0, 0, 1, x, y - 16);
-                beginPath();
                 col("#88d");
+                beginPath();
                 mto(10, 10);
                 lto(10, 30);
                 lto(20, 30);
-                fill();
-                col("#99e");
-                beginPath();
-                mto(0, 5);
-                lto(0, -30);
-                lto(8, 5);
                 fill();
                 ctx.restore();
             }
@@ -90,12 +86,27 @@ class Main {
         function drawEnemy(x:Float, y:Float) {
             col("red");
             drawRect(x, y, 20, 40);
+            col("#669");
+            drawRect(x, y, 4, 8);
+            col("gold");
+            drawRect(x, y - 20, 20, 4);
 
             for(i in extremes) {
-                col("brown");
-                drawRect(x + (i*10), y-32, 16, 28);
-                col("cyan");
-                drawRect(x + (i*4), y-10, 4, 20);
+                ctx.save();
+                ctx.transform(i, 0, 0, 1, x, y - 36);
+                col("#666");
+                beginPath();
+                mto(10, 30);
+                lto(10, 10);
+                lto(20, 10);
+                fill();
+                col("#a11");
+                beginPath();
+                mto(0, 65);
+                lto(0, 55);
+                lto(10, 55);
+                fill();
+                ctx.restore();
             }
         }
         function random():Float {
