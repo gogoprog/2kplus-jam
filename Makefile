@@ -16,7 +16,7 @@ build: compile
 
 retail: compile
 	mkdir -p retail
-	uglifyjs --compress --mangle --mangle-props --toplevel -- temp/main.js > temp/main.min.js
+	uglifyjs --compress --mangle --mangle-props --toplevel -O ascii_only=true -- temp/main.js > temp/main.min.js
 	cat src/before.html > retail/index.html
 	cat temp/main.min.js >> retail/index.html
 	cat src/after.html >> retail/index.html
