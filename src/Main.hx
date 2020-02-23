@@ -284,10 +284,11 @@ class Main {
                 col("#aaf");
                 var str = "";
 
-                for(i in 0...10) { str+= i< life ? "O":"_"; }
+                for(i in 0...10) {
+                    str+= i< life ? untyped __js__("'\\u25A0'"): untyped __js__("'\\u25A1'");
+                }
 
-                ftext("[" + str + "]", 12, 506);
-                col("#999");
+                ftext(str, 12, 506);
                 ftext(cast score, 400, 506);
             }
 
