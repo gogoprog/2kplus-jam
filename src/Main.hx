@@ -214,7 +214,7 @@ class Main {
 
                 if(mustFire) {
                     if(time - lastFireTime > 10) {
-                        fire(mx, 420, -1);
+                        fire(mx, 425, -1);
                         lastFireTime = time;
                         untyped zzfx(1, .05, 1355, .2, .63, .8, .1, .9, .98);
                     }
@@ -285,7 +285,7 @@ class Main {
                 var str = "";
 
                 for(i in 0...10) {
-                    str+= i< life ? untyped __js__("'\\u25A0'"): untyped __js__("'\\u25A1'");
+                    str += i < life ? untyped ws : untyped bs;
                 }
 
                 ftext(str, 12, 506);
