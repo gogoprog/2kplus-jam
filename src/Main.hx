@@ -13,6 +13,12 @@ typedef Enemy = {
     var life:Int;
 }
 
+typedef Particle = {
+    var x:Float;
+    var y:Float;
+    var t:Float;
+}
+
 class Main {
     static function main() {
         var w = window;
@@ -27,11 +33,13 @@ class Main {
         var mustFire:Bool;
         var bullets:Array<Bullet>;
         var enemies:Array<Enemy>;
-        var time:Int;
+        var particles:Array<Particle>;
+        var time:Int = 0;
         var extremes = [-1, 1];
         var m = Math;
         var abs = m.abs;
         var sin = m.sin;
+        var cos = m.cos;
         var state = 0;
         var score;
         var bestScore = 0;
@@ -131,6 +139,23 @@ class Main {
 
             bullets[n] = {x:x, y:y, d:d};
         }
+        function ftext(a, b, c) {
+            ctx.fillText(a, b, c);
+        }
+        function explode(x, y) {
+            for(j in 0...36) {
+                var n = particles.length;
+
+                for(i in 0...n) {
+                    if(particles[i].t > 666) {
+                        n = i;
+                        break;
+                    }
+                }
+
+                particles[n] = {x:x, y:y, t:0};
+            }
+        }
         function loop(t:Float) {
             col("black");
             drawRect(256, 256, screenSize, screenSize);
@@ -143,19 +168,20 @@ class Main {
 
             if(state == 0) {
                 scale(4);
-                ctx.fillText("SHIP2k", 24, 32);
+                ftext("SHIP2k", 24, 32);
                 scale(1/2);
-                ctx.fillText("Click to play!", 42, 232);
+                drawShip(200, 160);
+                ftext("Click to play!", 42, 232);
                 scale(1/2);
-                ctx.fillText("Best score: " + bestScore, 32, 232);
+                ftext("Best score: " + bestScore, 32, 232);
 
-                // if(mustFire) {
-                if(true) {
+                if(mustFire && time > 60) {
                     state++;
-                    time = score = 0;
+                    score = 0;
                     life = 10;
                     bullets = [];
                     enemies = [];
+                    particles = [];
                     lastFireTime = 0;
                 }
             } else if(state == 1) {
@@ -175,6 +201,7 @@ class Main {
                             if(life < 1) {
                                 bestScore = cast m.max(score, bestScore);
                                 state = 0;
+                                time = 0;
                             }
                         }
                     }
@@ -209,12 +236,25 @@ class Main {
                                 if(e.life < 1) {
                                     e.t = 666;
                                     score += 100;
+                                    explode(x, y);
                                 }
                             }
                         }
                     }
 
                     drawEnemy(x, y);
+                }
+
+                col("#d33");
+
+                for(i in 0...particles.length) {
+                    var p = particles[i];
+                    p.t++;
+                    var angle = i * 31.4/180;
+                    var v = random() * 3;
+                    p.x += cos(angle) * v;
+                    p.y += sin(angle) * v;
+                    drawRect(p.x, p.y, 2, 2);
                 }
 
                 rseed = time;
@@ -233,18 +273,20 @@ class Main {
                 }
 
                 alpha(1);
-                col("#455");
+
+                col("#222");
                 drawRect(256, 500, screenSize, 24);
-                col("white");
+                col("#aaf");
                 var str = "";
 
                 for(i in 0...10) { str+= i< life ? "O":"_"; }
 
-                ctx.fillText("[" + str + "]", 12, 506);
-                ctx.fillText(cast score, 400, 506);
-                time++;
+                ftext("[" + str + "]", 12, 506);
+                col("#999");
+                ftext(cast score, 400, 506);
             }
 
+            time++;
             w.requestAnimationFrame(loop);
         }
         loop(0);
