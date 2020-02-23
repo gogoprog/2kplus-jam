@@ -155,6 +155,8 @@ class Main {
 
                 particles[n] = {x:x, y:y, t:0};
             }
+
+            untyped zzfx(1, .05, 652, .9, .01, .6, 4.5, 71.2, .92);
         }
         function loop(t:Float) {
             col("black");
@@ -197,6 +199,7 @@ class Main {
                             life--;
                             b.y = 999;
                             alpha(0.5);
+                            untyped zzfx(1, .05, 918, .8, .04, 0, .2, 23.9, .61);
 
                             if(life < 1) {
                                 bestScore = cast m.max(score, bestScore);
@@ -213,6 +216,7 @@ class Main {
                     if(time - lastFireTime > 10) {
                         fire(mx, 420, -1);
                         lastFireTime = time;
+                        untyped zzfx(1, .05, 1355, .2, .63, .8, .1, .9, .98);
                     }
                 }
 
@@ -221,6 +225,7 @@ class Main {
                     var y = -64 + e.t;
 
                     if(e.t % 60 == 0) {
+                        untyped zzfx(1, .05, 48, .1, .42, 5.3, 0, 84.3, .48);
                         fire(x, y, 1);
                     }
 
@@ -232,6 +237,7 @@ class Main {
                                 b.y = -999;
                                 e.life -= 1;
                                 alpha(0.5);
+                                untyped zzfx(1, .05, 179, .1, .56, 3.5, 1.7, 80.1, .62);
 
                                 if(e.life < 1) {
                                     e.t = 666;
@@ -273,7 +279,6 @@ class Main {
                 }
 
                 alpha(1);
-
                 col("#222");
                 drawRect(256, 500, screenSize, 24);
                 col("#aaf");
