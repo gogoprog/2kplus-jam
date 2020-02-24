@@ -39,7 +39,7 @@ class Main {
         var bullets:Array<Bullet>;
         var enemies:Array<Enemy>;
         var particles:Array<Particle>;
-        var bonus:Array<Bonus>;
+        var bonuses:Array<Bonus>;
         var time:Int = 0;
         var extremes = [-1, 1];
         var m = Math;
@@ -163,7 +163,7 @@ class Main {
             rseed = 1;
             col("white");
 
-            for(i in 0...50) {
+            for(i in 0...99) {
                 drawRect(random() * screenSize, (random() * screenSize + t * (random() * 0.2)) % screenSize, 2, 2);
             }
 
@@ -183,7 +183,7 @@ class Main {
                     bullets = [];
                     enemies = [];
                     particles = [];
-                    bonus = [];
+                    bonuses = [];
                     lastFireTime = 0;
                 }
             } else if(state == 1) {
@@ -207,6 +207,19 @@ class Main {
                                 time = 0;
                             }
                         }
+                    }
+                }
+
+                col("gold");
+
+                for(b in bonuses) {
+                    b.y += 10;
+                    // beginPath();
+                    // ctx.arc(b.x, b.y, 10, 6.28, 0);
+                    // fill();
+
+                    if(abs(b.y - 420) + abs(b.x-mx) < 32) {
+                        b.y = 999;
                     }
                 }
 
@@ -243,6 +256,10 @@ class Main {
                                     e.t = 666;
                                     score += 100;
                                     explode(x, y);
+
+                                    if(random() < 1) {
+                                        bonuses[getn(bonuses)] = {x:x, y:y};
+                                    }
                                 }
                             }
                         }
@@ -260,7 +277,7 @@ class Main {
                     var v = random() * 3;
                     p.x += cos(angle) * v;
                     p.y += sin(angle) * v;
-                    drawRect(p.x, p.y, 2, 2);
+                    drawRect(p.x, p.y, cast v, cast v);
                 }
 
                 rseed = time;
