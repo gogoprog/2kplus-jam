@@ -19,6 +19,11 @@ typedef Particle = {
     var t:Float;
 }
 
+typedef Bonus = {
+    var x:Float;
+    var y:Float;
+}
+
 class Main {
     static function main() {
         var w = window;
@@ -34,6 +39,7 @@ class Main {
         var bullets:Array<Bullet>;
         var enemies:Array<Enemy>;
         var particles:Array<Particle>;
+        var bonus:Array<Bonus>;
         var time:Int = 0;
         var extremes = [-1, 1];
         var m = Math;
@@ -127,33 +133,26 @@ class Main {
         w.onmousemove = function(e) {
             mx = e.clientX;
         }
-        function fire(x, y, d) {
-            var n = bullets.length;
+        function getn(arr:Dynamic) {
+            var n = arr.length;
 
             for(i in 0...n) {
-                if(abs(bullets[i].y) > screenSize*2) {
-                    n = i;
-                    break;
+                if(arr[i].t > 666 || abs(arr[i].y) > screenSize*2) {
+                    return i;
                 }
             }
 
-            bullets[n] = {x:x, y:y, d:d};
+            return n;
+        }
+        function fire(x, y, d) {
+            bullets[getn(bullets)] = {x:x, y:y, d:d};
         }
         function ftext(a, b, c) {
             ctx.fillText(a, b, c);
         }
         function explode(x, y) {
             for(j in 0...36) {
-                var n = particles.length;
-
-                for(i in 0...n) {
-                    if(particles[i].t > 666) {
-                        n = i;
-                        break;
-                    }
-                }
-
-                particles[n] = {x:x, y:y, t:0};
+                particles[getn(particles)] = {x:x, y:y, t:0};
             }
 
             untyped zzfx(1, .05, 652, .9, .01, .6, 4.5, 71.2, .92);
@@ -184,6 +183,7 @@ class Main {
                     bullets = [];
                     enemies = [];
                     particles = [];
+                    bonus = [];
                     lastFireTime = 0;
                 }
             } else if(state == 1) {
@@ -266,16 +266,7 @@ class Main {
                 rseed = time;
 
                 if((time % 150) == 0) {
-                    var n = enemies.length;
-
-                    for(e in 0...n) {
-                        if(enemies[e].t > screenSize) {
-                            n = e;
-                            break;
-                        }
-                    }
-
-                    enemies[n] = {x: screenSize * random(), t:0, life:5};
+                    enemies[getn(enemies)] = {x: screenSize * random(), t:0, life:5};
                 }
 
                 alpha(1);
