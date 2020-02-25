@@ -230,12 +230,14 @@ class Main {
 
                         if(hit) {
                             power++;
+                            untyped zzfx(1, .05, 115, .5, .9, .7, .9, 6, .26);
                         }
                     } else {
                         col("#fff");
 
                         if(hit) {
                             life = cast Math.min(life+1, 10);
+                            untyped zzfx(1, .05, 1704, .2, .2, .2, .1, 0, .66);
                         }
                     }
 
@@ -273,7 +275,7 @@ class Main {
                     var x = e.x + sin(++e.t / 100) * 100;
                     var y = -64 + e.t;
 
-                    if(e.t % 60 == 0) {
+                    if(e.t % 60 < time/2000) {
                         untyped zzfx(1, .05, 48, .1, .4, 5, 0, 84, .5);
                         fire(x, y, 1);
                     }
@@ -306,7 +308,7 @@ class Main {
                     drawEnemy(x, y);
                 }
 
-                if((time % 150) == 0) {
+                if((time % 150) < time/2000) {
                     enemies[getn(enemies)] = {x: screenSize * random(), t:0, life:5};
                 }
 
