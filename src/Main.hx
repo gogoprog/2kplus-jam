@@ -129,7 +129,7 @@ class Main {
             }
         }
         function random():Float {
-            var x = (sin(rseed++) + 1) * 10000;
+            var x = (sin(rseed++) + 1) * 9999;
             return x - Std.int(x);
         }
         w.onmousedown = w.onmouseup = function(e) {
@@ -262,7 +262,7 @@ class Main {
                 for(i in 0...particles.length) {
                     var p = particles[i];
                     p.t++;
-                    var angle = i * 31.4/180;
+                    var angle = i * 0.174;
                     var v = random() * 3;
                     p.x += cos(angle) * v;
                     p.y += sin(angle) * v;
@@ -272,7 +272,7 @@ class Main {
                 rseed = time;
 
                 for(e in enemies) {
-                    var x = e.x + sin(++e.t / 100) * 100;
+                    var x = e.x + sin(++e.t / 99) * 99;
                     var y = -64 + e.t;
 
                     if(e.t % 60 < time/2000) {
