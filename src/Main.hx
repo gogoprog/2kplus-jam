@@ -210,15 +210,16 @@ class Main {
                     }
                 }
 
-                col("gold");
 
                 for(b in bonuses) {
-                    b.y += 10;
-                    // beginPath();
-                    // ctx.arc(b.x, b.y, 10, 6.28, 0);
-                    // fill();
+                    b.y += 3;
 
-                    if(abs(b.y - 420) + abs(b.x-mx) < 32) {
+                    col("gold");
+                    beginPath();
+                    ctx.arc(b.x, b.y, 10, 0, 6.28);
+                    fill();
+
+                    if(abs(b.y - 435) + abs(b.x-mx) < 20) {
                         b.y = 999;
                     }
                 }
@@ -227,7 +228,7 @@ class Main {
 
                 if(mustFire) {
                     if(time - lastFireTime > 10) {
-                        fire(mx, 425, -1);
+                        fire(mx, 435, -1);
                         lastFireTime = time;
                         untyped zzfx(1, .05, 1355, .2, .63, .8, .1, .9, .98);
                     }
