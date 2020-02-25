@@ -36,6 +36,7 @@ class Main {
         var rseed;
         var mx;
         var life:Int;
+        var power:Int;
         var mustFire:Bool;
         var bullets:Array<Bullet>;
         var enemies:Array<Enemy>;
@@ -184,6 +185,7 @@ class Main {
                     state++;
                     score = 0;
                     life = 10;
+                    power = 1;
                     bullets = [];
                     enemies = [];
                     particles = [];
@@ -195,7 +197,7 @@ class Main {
 
                 for(b in bullets) {
                     b.y += 10 * b.d;
-                    col(b.d == -1 ? "lightgreen" : "red");
+                    col(b.d == -1 ? "#0f0" : "red");
                     drawRect(b.x, b.y, 4, 12);
 
                     if(b.d > 0) {
@@ -218,7 +220,7 @@ class Main {
                     b.y += 3;
                     var hit:Bool = false;
 
-                    if(abs(b.y - 435) + abs(b.x-mx) < 20) {
+                    if(abs(b.y - 450) + abs(b.x-mx) < 32) {
                         b.y = 999;
                         hit = true;
                     }
@@ -227,7 +229,7 @@ class Main {
                         col("#0f0");
 
                         if(hit) {
-                            life++;
+                            power++;
                         }
                     } else {
                         col("#fff");
@@ -243,8 +245,11 @@ class Main {
                 drawShip(mx, 460);
 
                 if(mustFire) {
-                    if(time - lastFireTime > 10) {
-                        fire(mx, 435, -1);
+                    if(time - lastFireTime > 15 - power/2) {
+                        for(i in 0...cast power/2) {
+                            fire(mx - power*2 + i * 8, 435, -1);
+                        }
+
                         lastFireTime = time;
                         untyped zzfx(1, .05, 1355, .2, .6, .8, .1, .9, .9);
                     }
@@ -288,10 +293,11 @@ class Main {
                                     score += 100;
                                     explode(x, y);
 
-                                    if(random() < 1) {
+                                    if(random() < 0.6) {
                                         bonuses[getn(bonuses)] = {x:x, y:y, b:time%2};
-                                        trace(time%3);
                                     }
+
+                                    break;
                                 }
                             }
                         }
@@ -316,6 +322,7 @@ class Main {
 
                 ftext(str, 12, 506);
                 ftext(cast score, 400, 506);
+                ftext(cast power, 166, 506);
             }
 
             time++;
