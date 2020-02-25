@@ -159,13 +159,13 @@ class Main {
                 particles[getn(particles)] = {x:x, y:y, t:0};
             }
 
-            untyped zzfx(1, .05, 652, .9, .01, .6, 4.5, 71.2, .92);
+            untyped zzfx(1, .05, 652, 1, .01, .6, 4, 71, .9);
         }
         function loop(t:Float) {
-            col("black");
+            col("#000");
             drawRect(256, 256, screenSize, screenSize);
             rseed = 1;
-            col("white");
+            col("#fff");
 
             for(i in 0...99) {
                 drawRect(random() * screenSize, (random() * screenSize + t * (random() * 0.2)) % screenSize, 2, 2);
@@ -203,7 +203,7 @@ class Main {
                             life--;
                             b.y = 999;
                             alpha(0.5);
-                            untyped zzfx(1, .05, 918, .8, .04, 0, .2, 23.9, .61);
+                            untyped zzfx(1, .05, 918, .8, .04, 0, .2, 24, .6);
 
                             if(life < 1) {
                                 bestScore = cast m.max(score, bestScore);
@@ -230,7 +230,7 @@ class Main {
                             life++;
                         }
                     } else {
-                        col("white");
+                        col("#fff");
 
                         if(hit) {
                             life = cast Math.min(life+1, 10);
@@ -246,7 +246,7 @@ class Main {
                     if(time - lastFireTime > 10) {
                         fire(mx, 435, -1);
                         lastFireTime = time;
-                        untyped zzfx(1, .05, 1355, .2, .63, .8, .1, .9, .98);
+                        untyped zzfx(1, .05, 1355, .2, .6, .8, .1, .9, .9);
                     }
                 }
 
@@ -269,7 +269,7 @@ class Main {
                     var y = -64 + e.t;
 
                     if(e.t % 60 == 0) {
-                        untyped zzfx(1, .05, 48, .1, .42, 5.3, 0, 84.3, .48);
+                        untyped zzfx(1, .05, 48, .1, .4, 5, 0, 84, .5);
                         fire(x, y, 1);
                     }
 
@@ -281,7 +281,7 @@ class Main {
                                 b.y = -999;
                                 e.life -= 1;
                                 alpha(0.5);
-                                untyped zzfx(1, .05, 179, .1, .56, 3.5, 1.7, 80.1, .62);
+                                untyped zzfx(1, .05, 179, .1, .5, 3.5, 1.7, 80, .6);
 
                                 if(e.life < 1) {
                                     e.t = 666;
