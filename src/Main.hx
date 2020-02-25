@@ -179,14 +179,13 @@ class Main {
 
                 if(mustFire && time > 60) {
                     state++;
-                    score = 0;
+                    lastFireTime = time = score = 0;
                     life = 10;
                     power = 1;
                     bullets = [];
                     enemies = [];
                     particles = [];
                     bonuses = [];
-                    lastFireTime = 0;
                 }
             } else if(state == 1) {
                 alpha(1);
