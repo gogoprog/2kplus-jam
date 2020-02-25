@@ -105,6 +105,7 @@ class Main {
         function drawEnemy(x:Float, y:Float) {
             col("red");
             drawRect(x, y, 20, 40);
+            circle(x, y+20, 10);
             col("#669");
             drawRect(x, y, 4, 8);
             col("gold");
@@ -120,11 +121,6 @@ class Main {
                 lto(20, 10);
                 fill();
                 col("#a11");
-                beginPath();
-                mto(0, 65);
-                lto(0, 55);
-                lto(10, 55);
-                fill();
                 ctx.restore();
             }
         }
