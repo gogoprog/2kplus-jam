@@ -22,6 +22,7 @@ typedef Particle = {
 typedef Bonus = {
     var x:Float;
     var y:Float;
+    var b:Int;
 }
 
 class Main {
@@ -74,14 +75,17 @@ class Main {
         function fill() {
             ctx.fill();
         }
+        function circle(x, y, r) {
+            beginPath();
+            ctx.arc(x, y, r, 0, 6.28);
+            fill();
+        }
         function drawShip(x:Float, y:Float) {
             col("#ccd");
             drawRect(x, y, 20, 40);
             col("#669");
             drawRect(x, y, 4, 8);
-            beginPath();
-            ctx.arc(x, y - 20, 10, 3.14, 0);
-            fill();
+            circle(x, y-20, 10);
             col("gold");
             drawRect(x, y + 20, 20, 4);
 
@@ -210,18 +214,30 @@ class Main {
                     }
                 }
 
-
                 for(b in bonuses) {
                     b.y += 3;
-
-                    col("gold");
-                    beginPath();
-                    ctx.arc(b.x, b.y, 10, 0, 6.28);
-                    fill();
+                    var hit:Bool = false;
 
                     if(abs(b.y - 435) + abs(b.x-mx) < 20) {
                         b.y = 999;
+                        hit = true;
                     }
+
+                    if(b.b==0) {
+                        col("#0f0");
+
+                        if(hit) {
+                            life++;
+                        }
+                    } else {
+                        col("white");
+
+                        if(hit) {
+                            life = cast Math.min(life+1, 10);
+                        }
+                    }
+
+                    circle(b.x, b.y, 8);
                 }
 
                 drawShip(mx, 460);
@@ -233,6 +249,20 @@ class Main {
                         untyped zzfx(1, .05, 1355, .2, .63, .8, .1, .9, .98);
                     }
                 }
+
+                col("#d33");
+
+                for(i in 0...particles.length) {
+                    var p = particles[i];
+                    p.t++;
+                    var angle = i * 31.4/180;
+                    var v = random() * 3;
+                    p.x += cos(angle) * v;
+                    p.y += sin(angle) * v;
+                    drawRect(p.x, p.y, cast v, cast v);
+                }
+
+                rseed = time;
 
                 for(e in enemies) {
                     var x = e.x + sin(++e.t / 100) * 100;
@@ -259,7 +289,8 @@ class Main {
                                     explode(x, y);
 
                                     if(random() < 1) {
-                                        bonuses[getn(bonuses)] = {x:x, y:y};
+                                        bonuses[getn(bonuses)] = {x:x, y:y, b:time%2};
+                                        trace(time%3);
                                     }
                                 }
                             }
@@ -268,20 +299,6 @@ class Main {
 
                     drawEnemy(x, y);
                 }
-
-                col("#d33");
-
-                for(i in 0...particles.length) {
-                    var p = particles[i];
-                    p.t++;
-                    var angle = i * 31.4/180;
-                    var v = random() * 3;
-                    p.x += cos(angle) * v;
-                    p.y += sin(angle) * v;
-                    drawRect(p.x, p.y, cast v, cast v);
-                }
-
-                rseed = time;
 
                 if((time % 150) == 0) {
                     enemies[getn(enemies)] = {x: screenSize * random(), t:0, life:5};
