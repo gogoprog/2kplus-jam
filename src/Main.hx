@@ -232,7 +232,7 @@ class Main {
                         col("#fff");
 
                         if(hit) {
-                            life = cast Math.min(life+1, 10);
+                            life = cast m.min(life+1, 10);
                             untyped z(1, .05, 1704, .2, .2, .2, .1, 0, .6);
                         }
                     }
