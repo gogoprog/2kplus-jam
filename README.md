@@ -22,6 +22,8 @@ Entry for the 2kPlus Jam : A month long game jam for making 2 kilobyte games.
  * Sounds using ZzFX
  * Life bonuses
  * Weapon upgrades
+ 
+ All of this under 2048 bytes zipped!
 
 ## Build
 
