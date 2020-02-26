@@ -4,6 +4,10 @@
 
 Entry for the 2kPlus Jam : A month long game jam for making 2 kilobyte games.
 
+[Play here](https://gogoprog.itch.io/ship2k)
+
+![Demo](https://github.com/gogoprog/2kplus-jam/raw/master/demo.gif)
+
 ## Instructions
 
  * Use the mouse to move and click to shoot
